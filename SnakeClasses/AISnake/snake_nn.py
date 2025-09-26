@@ -13,8 +13,20 @@ class NNSnake(MySnake):
     def move(self, state):
         # convert state/obs to tensor
         obs = self._extract_obs(state)
+        processed_obs = {
+            "grid": np.expand_dims(obs["grid"], axis=0),
+            "stats": np.expand_dims(obs["stats"], axis=0)
+        }
+        # --- Print the shape here ---
+        # print("--- Processed Observation Shapes ---")
+        # for key, array in processed_obs.items():
+        #     print(f"Key '{key}': Shape {array.shape}, Dtype {array.dtype}")
+        # print("------------------------------------")
+        # print(processed_obs)
+        
+        action, _ = self.model.predict(processed_obs, deterministic=True)
 
-        action, _ = self.model.predict(obs, deterministic=True)
+        # action, _ = self.model.predict(obs, deterministic=True)
         action = int(action)
         
         # translate NN action into Battlesnake move

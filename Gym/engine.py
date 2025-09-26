@@ -150,8 +150,8 @@ class BattlesnakeEngine:
         foods = self.state["board"]["food"]
         
         dir_to_move = {
-            'up' : (0, -1),    # Up
-            'down' : (0, 1),     # Down
+            'up' : (0, 1),    # Up
+            'down' : (0, -1),     # Down
             'left' : (-1, 0),    # Left
             'right' : (1, 0)      # Right
         }

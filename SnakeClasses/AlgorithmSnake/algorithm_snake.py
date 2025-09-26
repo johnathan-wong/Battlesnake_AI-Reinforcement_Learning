@@ -27,8 +27,8 @@ class AlgorithmSnake(MySnake):
         my_head = self._dict_to_tuple(my_snake['body'][0])
         empty_space["left"] = self.__flood_fill_search((my_head[0]-1, my_head[1]), game_state, width, height)
         empty_space["right"] = self.__flood_fill_search((my_head[0]+1, my_head[1]), game_state, width, height)
-        empty_space["down"] = self.__flood_fill_search((my_head[0], my_head[1]+1), game_state, width, height)
-        empty_space["up"] = self.__flood_fill_search((my_head[0], my_head[1]-1), game_state, width, height)
+        empty_space["up"] = self.__flood_fill_search((my_head[0], my_head[1]+1), game_state, width, height)
+        empty_space["down"] = self.__flood_fill_search((my_head[0], my_head[1]-1), game_state, width, height)
         result = sorted(empty_space.items(), key=lambda item: item[1], reverse=True)
         # A* Algorithm call
         '''
@@ -59,7 +59,6 @@ class AlgorithmSnake(MySnake):
                 continue
             safe_foods.append((food_pos, my_path_len))
             
-        # print(result)
         # - Sort Foods and Get Target Path
         safe_foods.sort(key=lambda x: x[1])
         for closest_to_food in safe_foods:
@@ -78,8 +77,8 @@ class AlgorithmSnake(MySnake):
     """
     def __flood_fill_search(self,start_pos:typing.Tuple[int, int], game_state: typing.Dict, width: int, height: int) -> int:
         # Basic Info
-        # my_snake = next((snake for snake in snakes if snake["id"] == self.id), None)
-        opponents = game_state['board']['snakes']
+        snakes = game_state['board']['snakes']
+        my_snake = next((snake for snake in snakes if snake["id"] == self.id), None)
         foods = game_state['board']['food']
         # Variables
         visited = set()
@@ -90,7 +89,7 @@ class AlgorithmSnake(MySnake):
         count = 0
         
         # occupied space initialize
-        for snake in opponents:
+        for snake in snakes:
             # Add Body
             for pos in snake["body"][:-1]:
                 occupied_space.add(self._dict_to_tuple(pos))
@@ -103,11 +102,12 @@ class AlgorithmSnake(MySnake):
                     tail_pos = self._dict_to_tuple(snake["body"][-1])
                     occupied_space.add(tail_pos)
             
-            # Add neighbors of the head
-            occupied_space.add((head_pos[0] + 1, head_pos[1]))
-            occupied_space.add((head_pos[0] - 1, head_pos[1]))
-            occupied_space.add((head_pos[0], head_pos[1] + 1))
-            occupied_space.add((head_pos[0], head_pos[1] - 1))      
+            if snake["id"] != my_snake["id"]:
+                # Add neighbors of the head
+                occupied_space.add((head_pos[0] + 1, head_pos[1]))
+                occupied_space.add((head_pos[0] - 1, head_pos[1]))
+                occupied_space.add((head_pos[0], head_pos[1] + 1))
+                occupied_space.add((head_pos[0], head_pos[1] - 1))      
                     
                 
         if start_pos in occupied_space:

@@ -39,9 +39,17 @@ class BattlesnakeEnv(gym.Env):
         
         state = self.engine.step(actions)
         obs = self._extract_obs(state)
+        # print(obs)
+        # --- Print the shape here ---
+        # print("--- Processed Observation Shapes ---")
+        # for key, array in obs.items():
+        #     print(f"Key '{key}': Shape {array.shape}, Dtype {array.dtype}")
+        # print("------------------------------------")
+        
         reward = self._compute_reward(state)
         done = self.engine.done
-        # print(done)
+        # if done:
+        #     print(done, self.engine.turn)
 
         return obs, reward, done, False, state
         
